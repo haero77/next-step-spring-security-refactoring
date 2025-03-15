@@ -8,6 +8,7 @@ import nextstep.security.config.SecurityFilterChain;
 import nextstep.security.config.annotation.web.SecurityConfigurer;
 import nextstep.security.config.annotation.web.configurers.CsrfConfigurer;
 import nextstep.security.config.annotation.web.configurers.FormLoginConfigurer;
+import nextstep.security.config.annotation.web.configurers.HttpBasicConfigurer;
 
 import java.util.*;
 
@@ -52,12 +53,13 @@ public class HttpSecurity {
         return this;
     }
 
-    public HttpSecurity httpBasic() {
+    public HttpSecurity formLogin(Customizer<FormLoginConfigurer> formLoginCustomizer) {
+        formLoginCustomizer.customize(getOrApply(new FormLoginConfigurer()));
         return this;
     }
 
-    public HttpSecurity formLogin(Customizer<FormLoginConfigurer> formLoginCustomizer) {
-        formLoginCustomizer.customize(getOrApply(new FormLoginConfigurer()));
+    public HttpSecurity httpBasic(Customizer<HttpBasicConfigurer> httpBasicCustomizer) {
+        httpBasicCustomizer.customize(getOrApply(new HttpBasicConfigurer()));
         return this;
     }
 
