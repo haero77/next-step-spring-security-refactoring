@@ -8,6 +8,7 @@ import nextstep.security.access.AccessDeniedHandler;
 import nextstep.security.access.MvcRequestMatcher;
 import nextstep.security.access.RequestMatcher;
 import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -16,12 +17,16 @@ import java.util.Set;
 
 public final class CsrfFilter extends OncePerRequestFilter {
 
-    private static final RequestMatcher DEFAULT_CSRF_MATCHER = new DefaultRequiresCsrfMatcher();
+    public static final RequestMatcher DEFAULT_CSRF_MATCHER = new DefaultRequiresCsrfMatcher();
 
     private final CsrfTokenRepository tokenRepository = new HttpSessionCsrfTokenRepository();
     private final Set<MvcRequestMatcher> ignoringRequestMatchers;
-    private RequestMatcher requiredCsrfRequestMatcher = DEFAULT_CSRF_MATCHER;
+    private RequestMatcher requireCsrfProtectionMatcher = DEFAULT_CSRF_MATCHER;
     private final AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandler();
+
+    public CsrfFilter() {
+        this(Set.of());
+    }
 
     public CsrfFilter(Set<MvcRequestMatcher> ignoringRequestMatchers) {
         this.ignoringRequestMatchers = ignoringRequestMatchers;
@@ -41,7 +46,7 @@ public final class CsrfFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         CsrfToken token = setUpToken(request, response);
 
-        if (!this.requiredCsrfRequestMatcher.matches(request)) {
+        if (!this.requireCsrfProtectionMatcher.matches(request)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -78,6 +83,11 @@ public final class CsrfFilter extends OncePerRequestFilter {
         request.setAttribute(csrfToken.getParameterName(), csrfToken);
 
         return csrfToken;
+    }
+
+    public void setRequireCsrfProtectionMatcher(RequestMatcher requireCsrfProtectionMatcher) {
+        Assert.notNull(requireCsrfProtectionMatcher, "requireCsrfProtectionMatcher cannot be null");
+        this.requireCsrfProtectionMatcher = requireCsrfProtectionMatcher;
     }
 
     private static final class DefaultRequiresCsrfMatcher implements RequestMatcher {

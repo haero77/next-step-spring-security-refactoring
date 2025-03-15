@@ -1,9 +1,11 @@
 package nextstep.security.config.annotation.web.builders;
 
 import jakarta.servlet.Filter;
+import nextstep.security.config.Customizer;
 import nextstep.security.config.DefaultSecurityFilterChain;
 import nextstep.security.config.SecurityFilterChain;
 import nextstep.security.config.annotation.web.SecurityConfigurer;
+import nextstep.security.config.annotation.web.configurers.CsrfConfigurer;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,7 +34,8 @@ public class HttpSecurity {
         }
     }
 
-    public HttpSecurity csrf() {
+    public HttpSecurity csrf(Customizer<CsrfConfigurer> csrfCustomizer) {
+        csrfCustomizer.customize(getOrApply(new CsrfConfigurer()));
         return this;
     }
 
@@ -48,12 +51,16 @@ public class HttpSecurity {
         return this;
     }
 
-    private SecurityConfigurer getOrApply(SecurityConfigurer configurer) {
+    public void addFilter(Filter filter) {
+        this.filters.add(filter);
+    }
+
+    private <C extends SecurityConfigurer> C getOrApply(C configurer) {
         Class<? extends SecurityConfigurer> clazz = configurer.getClass();
 
         SecurityConfigurer existingConfig = this.configurers.get(clazz);
         if (existingConfig != null) {
-            return existingConfig;
+            return (C) existingConfig;
         }
 
         this.configurers.put(clazz, configurer);
