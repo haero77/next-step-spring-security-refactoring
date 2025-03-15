@@ -15,10 +15,10 @@ import nextstep.security.access.hierarchicalroles.RoleHierarchy;
 import nextstep.security.access.hierarchicalroles.RoleHierarchyImpl;
 import nextstep.security.authentication.*;
 import nextstep.security.authorization.*;
-import nextstep.security.config.DefaultSecurityFilterChain;
-import nextstep.security.config.DelegatingFilterProxy;
-import nextstep.security.config.FilterChainProxy;
-import nextstep.security.config.SecurityFilterChain;
+import nextstep.security.config.*;
+import nextstep.security.config.annotation.web.builders.HttpSecurity;
+import nextstep.security.config.annotation.web.configuration.EnableWebSecurity;
+import nextstep.security.config.annotation.web.configuration.HttpSecurityConfiguration;
 import nextstep.security.context.SecurityContextHolderFilter;
 import nextstep.security.userdetails.UserDetailsService;
 import nextstep.security.web.csrf.CsrfFilter;
@@ -26,6 +26,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 
 import java.util.*;
@@ -33,6 +34,7 @@ import java.util.*;
 @Configuration
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
@@ -72,6 +74,13 @@ public class SecurityConfig {
         return new ProviderManager(List.of(
                 new DaoAuthenticationProvider(userDetailsService),
                 new OAuth2LoginAuthenticationProvider(oAuth2UserService)));
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain2(HttpSecurity http) {
+        return http
+                .csrf()
+                .build();
     }
 
     @Bean
