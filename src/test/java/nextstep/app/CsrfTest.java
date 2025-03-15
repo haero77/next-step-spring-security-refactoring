@@ -48,7 +48,7 @@ class CsrfTest {
 
     @Test
     public void includeToken() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/account"))
+        MvcResult mvcResult = mockMvc.perform(get("/account")) // GET 요청이므로 CSRF 검증 X
                 .andExpect(status().isOk())
                 .andReturn();
 
