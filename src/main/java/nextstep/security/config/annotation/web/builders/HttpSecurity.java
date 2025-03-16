@@ -9,6 +9,7 @@ import nextstep.security.config.annotation.web.SecurityConfigurer;
 import nextstep.security.config.annotation.web.configurers.CsrfConfigurer;
 import nextstep.security.config.annotation.web.configurers.FormLoginConfigurer;
 import nextstep.security.config.annotation.web.configurers.HttpBasicConfigurer;
+import nextstep.security.config.annotation.web.configurers.SecurityContextConfigurer;
 
 import java.util.*;
 
@@ -64,6 +65,11 @@ public class HttpSecurity {
     }
 
     public HttpSecurity authorizeHttpRequests() {
+        return this;
+    }
+
+    public HttpSecurity securityContext(Customizer<SecurityContextConfigurer> securityContextCustomizer) {
+        securityContextCustomizer.customize(getOrApply(new SecurityContextConfigurer()));
         return this;
     }
 
