@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import nextstep.oauth2.endpoint.OAuth2AuthorizationRequest;
 import nextstep.oauth2.registration.ClientRegistrationRepository;
+import org.springframework.util.Assert;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class OAuth2AuthorizationRequestRedirectFilter extends OncePerRequestFilt
     private final AuthorizationRequestRepository authorizationRequestRepository = new AuthorizationRequestRepository();
 
     public OAuth2AuthorizationRequestRedirectFilter(ClientRegistrationRepository clientRegistrationRepository) {
+        Assert.notNull(clientRegistrationRepository, "clientRegistrationRepository cannot be null");
         authorizationRequestResolver = new OAuth2AuthorizationRequestResolver(clientRegistrationRepository, DEFAULT_AUTHORIZATION_REQUEST_BASE_URI);
     }
 

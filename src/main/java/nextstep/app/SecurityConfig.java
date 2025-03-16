@@ -83,6 +83,7 @@ public class SecurityConfig {
                 .csrf(c -> c.ignoringRequestMatchers("/login"))
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 

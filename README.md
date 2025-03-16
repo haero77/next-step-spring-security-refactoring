@@ -28,9 +28,11 @@
 
 ## 2단계 - 인증 관련 리팩토링
 
-- [ ] `.formLogin()` 메서드를 사용하여 폼 로그인 기능을 설정하고, U`sernamePasswordAuthenticationFilter`를 자동으로 추가한다.
-- [ ] `.httpBasic()` 메서드를 사용해 HTTP Basic 인증을 설정하고, `BasicAuthenticationFilter`를 자동으로 추가한다.
-- [ ] `securityContext()`는 유저가 직접 설정할 수 없도록 하고, HttpSecurity가 빈으로 등록될 때 자동으로 설정한다. 
+- [x] `.formLogin()` 메서드를 사용하여 폼 로그인 기능을 설정하고, U`sernamePasswordAuthenticationFilter`를 자동으로 추가한다.
+- [x] `.httpBasic()` 메서드를 사용해 HTTP Basic 인증을 설정하고, `BasicAuthenticationFilter`를 자동으로 추가한다.
+- [x] `.securityContext()` 메서드를 사용하여 `SecurityContextHolderFilter` 자동으로 추가   
+- [x] oauth2 리팩토링 
+  - [x] OAuth2AuthorizationRequestRedirectFilter 등록, OAuth2LoginAuthenticationFilter 등록
 
 ## 3단계 - 인가 관련 리팩토링
 
