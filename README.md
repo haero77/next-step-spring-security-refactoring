@@ -4,7 +4,7 @@
 
 ## 실습 - 취약점 대응(CsrfFilter)
 
->  CsrfFilter를 이용한 CSRF 공격 대응
+> CsrfFilter를 이용한 CSRF 공격 대응
 
 - [x] CsrfToken 구현
 - [x] CsrfTokenRepository 구현 - HttpSessionCsrfTokenRepository
@@ -25,22 +25,41 @@
 - [x] @EnableWebSecurity, HttpSecurityConfiguration를 이용한 HttpSecurity 빈 등록
 - [x] csrf 필터를 configurer를 이용하여 설정
 
-
 ## 2단계 - 인증 관련 리팩토링
 
 - [x] `.formLogin()` 메서드를 사용하여 폼 로그인 기능을 설정하고, U`sernamePasswordAuthenticationFilter`를 자동으로 추가한다.
 - [x] `.httpBasic()` 메서드를 사용해 HTTP Basic 인증을 설정하고, `BasicAuthenticationFilter`를 자동으로 추가한다.
-- [x] `.securityContext()` 메서드를 사용하여 `SecurityContextHolderFilter` 자동으로 추가   
-- [x] oauth2 리팩토링 
+- [x] `.securityContext()` 메서드를 사용하여 `SecurityContextHolderFilter` 자동으로 추가
+- [x] oauth2 리팩토링
   - [x] OAuth2AuthorizationRequestRedirectFilter 등록, OAuth2LoginAuthenticationFilter 등록
 
 ## 3단계 - 인가 관련 리팩토링
 
+> 예시 코드
+
+```java
+
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers("/public").permitAll()  // /public 경로는 모두 허용
+                    .anyRequest().authenticated())  // 그 외의 경로는 인증 필요
+            .formLogin(Customizer.withDefaults())  // 폼 로그인
+            .httpBasic(Customizer.withDefaults());  // HTTP Basic 인증
+
+    return http.build();
+}
+```
+
+- [x] `authorizeHttpRequests()` 메서드 구현
+  - [x] `AuthorizeHttpRequestsConfigurer`를 이용한 설정
+  - [x] 특정 경로에 대해 인증 없이 접근 가능하도록 설정하고, 나머지 요청에 대해서는 인증이 필요하도록 설정한다.
+  - [x] 특정 경로에 대해서 권한에 따라 접근 가능하게 할지/말지를 설정한다
+
 ## 4단계 - Auto Configuration 적용
 
----
-
-# 플로우차트를 활용한 깊은 이해
+# 플로우차트를 활용한 이해
 
 ## CSRF 공격 대응
 
