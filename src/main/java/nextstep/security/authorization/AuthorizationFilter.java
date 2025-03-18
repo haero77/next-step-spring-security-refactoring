@@ -29,15 +29,27 @@ public class AuthorizationFilter extends GenericFilterBean {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             AuthorizationDecision decision = this.authorizationManager.check(authentication, request);
-            if (decision != null && !decision.isGranted()) {
-                throw new AccessDeniedException("Access Denied");
+
+            if (authorizationSucceed(decision)) {
+                chain.doFilter(servletRequest, servletResponse);
+                return;
             }
 
-            chain.doFilter(request, response);
+            // 인가에 실패했는데 인증에 실패해서 인가에 실패한 경우
+            if (authentication == null || !authentication.isAuthenticated()) {
+                throw new AuthenticationException();
+            }
+
+            // 인가에 실패한 경우
+            throw new AccessDeniedException();
         } catch (AccessDeniedException e) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         } catch (AuthenticationException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
+    }
+
+    private boolean authorizationSucceed(AuthorizationDecision decision) {
+        return decision != null && decision.isGranted();
     }
 }
