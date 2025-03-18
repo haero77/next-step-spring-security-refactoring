@@ -20,7 +20,6 @@ public class RequestMatcherDelegatingAuthorizationManager implements Authorizati
             RequestMatcher matcher = mapping.getRequestMatcher();
             if (matcher.matches(request)) {
                 AuthorizationManager manager = mapping.getEntry();
-
                 return manager.check(authentication, request);
             }
         }
