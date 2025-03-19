@@ -59,6 +59,23 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
 ## 4단계 - Auto Configuration 적용
 
+> Auto Configuration을 통한 기본 SecurityFilterChain 설정
+> 
+> 스프링 부트의 자동 설정을 통해 기본 SecurityFilterChain이 설정되도록 하고, 필요시 사용자가 새로운 SecurityFilterChain을 추가할 수 있도록 한다. 사용자가 새로운 SecurityFilterChain을 정의할 경우, 기본 보안 설정이 비활성화된다.
+> 주요 클래스 
+> - @ConditionalOnDefaultWebSecurity
+> - @DefaultWebSecurityCondition
+> - SpringBootWebSecurityConfiguration
+> - EnableWebSecurity
+> 
+
+![img.png](img.png)
+![img_1.png](img_1.png)
+
+- [x] AutoConfiguration을 이용하여 
+  - [x] 사용자가 SecurityFilterChain을 정의한 경우 기본 SecurityFilterChain이 설정된다. 
+  - [x] 사용자가 SecurityFilterChain을 정의하지 않은 경우 기본 SecurityFilterChain이 설정되지 않는다. 
+
 # 플로우차트를 활용한 이해
 
 ## CSRF 공격 대응

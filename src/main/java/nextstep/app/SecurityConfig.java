@@ -1,5 +1,6 @@
 package nextstep.app;
 
+import nextstep.autoconfigure.EnableSpringBootSecurityConfiguration;
 import nextstep.oauth2.OAuth2ClientProperties;
 import nextstep.oauth2.authentication.OAuth2LoginAuthenticationProvider;
 import nextstep.oauth2.registration.ClientRegistration;
@@ -31,6 +32,7 @@ import java.util.Map;
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
 @EnableWebSecurity
+@EnableSpringBootSecurityConfiguration
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
