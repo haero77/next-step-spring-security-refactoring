@@ -14,11 +14,13 @@ import java.util.List;
 
 public class CsrfConfigurer implements SecurityConfigurer {
 
-    private RequestMatcher csrfRequiredRequestMathcer = CsrfFilter.DEFAULT_CSRF_MATCHER;
-    private List<RequestMatcher> ignoredCsrfProtectionMatchers = new ArrayList<>();
+    private RequestMatcher csrfRequiredRequestMatcher;
+    private List<RequestMatcher> ignoredCsrfProtectionMatchers;
 
     @Override
     public void init(HttpSecurity http) {
+        this.csrfRequiredRequestMatcher = CsrfFilter.DEFAULT_CSRF_MATCHER;
+        this.ignoredCsrfProtectionMatchers = new ArrayList<>();
     }
 
     @Override
@@ -33,11 +35,11 @@ public class CsrfConfigurer implements SecurityConfigurer {
 
     private RequestMatcher getCsrfProtectionRequiredRequestMatcher() {
         if (this.ignoredCsrfProtectionMatchers.isEmpty()) {
-            return this.csrfRequiredRequestMathcer;
+            return this.csrfRequiredRequestMatcher;
         }
 
         return new AndRequestMatcher(
-                this.csrfRequiredRequestMathcer,
+                this.csrfRequiredRequestMatcher,
                 new NegatedRequestMatcher(new OrRequestMatcher(this.ignoredCsrfProtectionMatchers))
         );
     }

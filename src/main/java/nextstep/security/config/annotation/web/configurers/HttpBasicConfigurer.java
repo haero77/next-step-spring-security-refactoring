@@ -7,14 +7,16 @@ import nextstep.security.config.annotation.web.builders.HttpSecurity;
 
 public class HttpBasicConfigurer implements SecurityConfigurer {
 
+    private AuthenticationManager authenticationManager;
+
     @Override
     public void init(HttpSecurity http) {
+        this.authenticationManager = http.getSharedObject(AuthenticationManager.class);
     }
 
     @Override
     public void configure(HttpSecurity http) {
-        AuthenticationManager manager = http.getSharedObject(AuthenticationManager.class);
-        BasicAuthenticationFilter filter = new BasicAuthenticationFilter(manager);
+        BasicAuthenticationFilter filter = new BasicAuthenticationFilter(this.authenticationManager);
         http.addFilter(filter);
     }
 }
