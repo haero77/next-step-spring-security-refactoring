@@ -76,6 +76,15 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
   - [x] 사용자가 SecurityFilterChain을 정의한 경우 기본 SecurityFilterChain이 설정된다. 
   - [x] 사용자가 SecurityFilterChain을 정의하지 않은 경우 기본 SecurityFilterChain이 설정되지 않는다. 
 
+### 피드백 적용 
+
+
+- [ ] HttpSecurity에서 필터의 순서를 어떻게 제어할지에 대한 고민
+- [x] HttpSecurity를 빈 등록 시 유연성이 떨어지는 문제 고민
+- [x] SecurityConfigurer의 `init`, `configure` 구분을 어떻게 하고 있는지?  
+
+
+
 # 플로우차트를 활용한 이해
 
 ## CSRF 공격 대응
